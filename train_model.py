@@ -1,11 +1,13 @@
 """
 https://github.com/mnoukhov/tf-estimator-mnist
 
-global step 2700: accuracy = 0.9889, global_step = 2700, loss = 0.034140434
+accuracy = 0.9889, global_step = 2700, loss = 0.034140434
 - 25.3106 sec. 
 
 MULTI-GPU:
-accuracy = 0.9893, global_step = 2100, loss = 0.032562256
+NUM_GPUS = 2
+accuracy = 0.9899, global_step = 3000, loss = 0.035298657
+- 31.8924 sec.
 """
 
 import tensorflow as tf
@@ -138,7 +140,7 @@ def main(_):
 			every_n_iter=10)
 	]
 
-	NUM_GPUS = 2
+	NUM_GPUS = 3
 	strategy = tf.contrib.distribute.MirroredStrategy(num_gpus=NUM_GPUS)
 	config = tf.estimator.RunConfig(train_distribute=strategy)
 	#estimator = tf.keras.estimator.model_to_estimator(model, config=config)
