@@ -1,9 +1,13 @@
 """
 https://github.com/mnoukhov/tf-estimator-mnist
+
+MULTI-GPU:
+accuracy = 0.9893, global_step = 2100, loss = 0.032562256
 """
 
 import tensorflow as tf
 import mnist_dataset as dataset
+from utils.timer import timer
 
 flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/tmp/mnist/data',
@@ -141,6 +145,8 @@ def main(_):
 		model_dir=FLAGS.model_dir,
 		config=config)
 
+	timer('TRAIN_AND_EVALUATE')
+	
 	for _ in range(FLAGS.num_epochs):
 		mnist_classifier.train(
 			input_fn=train_data,
@@ -149,6 +155,7 @@ def main(_):
 		mnist_classifier.evaluate(
 			input_fn=eval_data)
 
+	timer()
 
 if __name__ == '__main__':
 	tf.logging.set_verbosity(tf.logging.INFO)
