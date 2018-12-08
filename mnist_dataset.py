@@ -36,26 +36,26 @@ def read32(bytestream):
 def check_image_file_header(filename):
 	"""Validate that filename corresponds to images for the MNIST dataset."""
 	with tf.gfile.Open(filename, 'rb') as f:
-	magic = read32(f)
-	read32(f)	# num_images, unused
-	rows = read32(f)
-	cols = read32(f)
-	if magic != 2051:
-		raise ValueError('Invalid magic number %d in MNIST file %s' % (magic,
-																	 f.name))
-	if rows != 28 or cols != 28:
-		raise ValueError(
-			'Invalid MNIST file %s: Expected 28x28 images, found %dx%d' %
-			(f.name, rows, cols))
+		magic = read32(f)
+		read32(f)	# num_images, unused
+		rows = read32(f)
+		cols = read32(f)
+		if magic != 2051:
+			raise ValueError('Invalid magic number %d in MNIST file %s' % (magic,
+																		 f.name))
+		if rows != 28 or cols != 28:
+			raise ValueError(
+				'Invalid MNIST file %s: Expected 28x28 images, found %dx%d' %
+				(f.name, rows, cols))
 
 
 def check_labels_file_header(filename):
 	"""Validate that filename corresponds to labels for the MNIST dataset."""
 	with tf.gfile.Open(filename, 'rb') as f:
-	magic = read32(f)
-	read32(f)	# num_items, unused
-	if magic != 2049:
-		raise ValueError('Invalid magic number %d in MNIST file %s' % (magic,
+		magic = read32(f)
+		read32(f)	# num_items, unused
+		if magic != 2049:
+			raise ValueError('Invalid magic number %d in MNIST file %s' % (magic,
 																	 f.name))
 
 
@@ -88,21 +88,22 @@ def dataset(directory, images_file, labels_file):
 	check_labels_file_header(labels_file)
 
 	def decode_image(image):
-	# Normalize from [0, 255] to [0.0, 1.0]
-	image = tf.decode_raw(image, tf.uint8)
-	image = tf.cast(image, tf.float32)
-	image = tf.reshape(image, [784])
-	return image / 255.0
+		# Normalize from [0, 255] to [0.0, 1.0]
+		image = tf.decode_raw(image, tf.uint8)
+		image = tf.cast(image, tf.float32)
+		image = tf.reshape(image, [784])
+		return image / 255.0
 
 	def decode_label(label):
-	label = tf.decode_raw(label, tf.uint8)	# tf.string -> [tf.uint8]
-	label = tf.reshape(label, [])	# label is a scalar
-	return tf.to_int32(label)
+		label = tf.decode_raw(label, tf.uint8)	# tf.string -> [tf.uint8]
+		label = tf.reshape(label, [])	# label is a scalar
+		return tf.to_int32(label)
 
 	images = tf.data.FixedLengthRecordDataset(
 		images_file, 28 * 28, header_bytes=16).map(decode_image)
 	labels = tf.data.FixedLengthRecordDataset(
 		labels_file, 1, header_bytes=8).map(decode_label)
+	
 	return tf.data.Dataset.zip((images, labels))
 
 
