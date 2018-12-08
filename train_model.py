@@ -143,10 +143,11 @@ def main(_):
 	mnist_classifier = tf.estimator.Estimator(
 		model_fn=model_function,
 		model_dir=FLAGS.model_dir,
-		config=config)
+		#config=config
+		)
 
 	timer('TRAIN_AND_EVALUATE')
-	
+
 	for _ in range(FLAGS.num_epochs):
 		mnist_classifier.train(
 			input_fn=train_data,
