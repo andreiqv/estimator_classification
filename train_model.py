@@ -1,3 +1,7 @@
+"""
+https://github.com/mnoukhov/tf-estimator-mnist
+"""
+
 import tensorflow as tf
 import mnist_dataset as dataset
 
@@ -127,9 +131,15 @@ def main(_):
 			every_n_iter=10)
 	]
 
+	NUM_GPUS = 2
+	strategy = tf.contrib.distribute.MirroredStrategy(num_gpus=NUM_GPUS)
+	config = tf.estimator.RunConfig(train_distribute=strategy)
+	#estimator = tf.keras.estimator.model_to_estimator(model, config=config)
+
 	mnist_classifier = tf.estimator.Estimator(
 		model_fn=model_function,
-		model_dir=FLAGS.model_dir)
+		model_dir=FLAGS.model_dir,
+		config=config)
 
 	for _ in range(FLAGS.num_epochs):
 		mnist_classifier.train(
