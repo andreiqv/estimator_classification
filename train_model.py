@@ -1,6 +1,9 @@
 """
 https://github.com/mnoukhov/tf-estimator-mnist
 
+global step 2700: accuracy = 0.9889, global_step = 2700, loss = 0.034140434
+- 25.3106 sec. 
+
 MULTI-GPU:
 accuracy = 0.9893, global_step = 2100, loss = 0.032562256
 """
@@ -143,7 +146,7 @@ def main(_):
 	mnist_classifier = tf.estimator.Estimator(
 		model_fn=model_function,
 		model_dir=FLAGS.model_dir,
-		#config=config
+		config=config
 		)
 
 	timer('TRAIN_AND_EVALUATE')
