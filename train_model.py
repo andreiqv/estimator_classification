@@ -8,6 +8,11 @@ MULTI-GPU:
 NUM_GPUS = 2
 accuracy = 0.9899, global_step = 3000, loss = 0.035298657
 - 31.8924 sec.
+
+NUM_GPUS = 3
+accuracy = 0.9908, global_step = 3200, loss = 0.03562759
+- 25.2826 sec.
+
 """
 
 import tensorflow as tf
